@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { FormError } from "@/components/ui/FormError";
 import { chargeMonthlyFees } from "@/lib/actions/charges";
+import { useSegment } from "@/components/layout/SegmentProvider";
 
 function currentMonth() {
   return todayIso().slice(0, 7); // YYYY-MM
@@ -18,6 +19,7 @@ function currentMonth() {
 
 export function MonthlyChargeButton() {
   const router = useRouter();
+  const { terms } = useSegment();
   const [open, setOpen] = useState(false);
   const [month, setMonth] = useState(currentMonth());
   const [pending, setPending] = useState(false);
@@ -59,8 +61,8 @@ export function MonthlyChargeButton() {
         <div className="space-y-4">
           <p className="text-sm text-ink-muted">
             Tanlangan oy uchun barcha aktiv o&apos;quvchilarning balansidan
-            guruhining oylik narxi ayiriladi. Allaqachon hisoblangan
-            o&apos;quvchilar ikkinchi marta hisoblanmaydi.
+            {terms.group.toLowerCase()}ining oylik narxi (o&apos;quvchi chegirmasi ayirilgan holda)
+            olinadi. Allaqachon hisoblangan o&apos;quvchilar ikkinchi marta hisoblanmaydi.
           </p>
 
           <div>

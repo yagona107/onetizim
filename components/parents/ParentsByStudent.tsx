@@ -20,7 +20,7 @@ interface StudentRow {
   status: string;
   created_at: string;
   birth_date: string | null;
-  group: { subject: string | null; teacher: { full_name: string } | null } | null;
+  group: { course: { name: string } | null; teacher: { full_name: string } | null } | null;
   links: ParentLink[];
 }
 
@@ -54,7 +54,7 @@ export async function ParentsByStudent({
   const { data } = await supabase
     .from("students")
     .select(
-      "id, full_name, balance, status, created_at, birth_date, group:groups(subject, teacher:teachers(full_name)), links:student_parents(parent:parents(full_name, relation, phone))",
+      "id, full_name, balance, status, created_at, birth_date, group:groups(course:courses(name), teacher:teachers(full_name)), links:student_parents(parent:parents(full_name, relation, phone))",
     )
     .neq("status", "archived")
     .order("full_name");
@@ -62,7 +62,7 @@ export async function ParentsByStudent({
   const q = params.q?.trim().toLowerCase();
   const today = todayIso();
   const all = (data ?? []) as unknown as StudentRow[];
-  const subjects = [...new Set(all.map((s) => s.group?.subject).filter((v): v is string => Boolean(v)))];
+  const subjects = [...new Set(all.map((s) => s.group?.course?.name).filter((v): v is string => Boolean(v)))];
   const teachers = [...new Set(all.map((s) => s.group?.teacher?.full_name).filter((v): v is string => Boolean(v)))];
 
   const rows = ((data ?? []) as unknown as StudentRow[])
@@ -79,7 +79,7 @@ export async function ParentsByStudent({
       if (params.balance === "debt" && balance >= 0) return false;
       if (params.balance === "positive" && balance <= 0) return false;
       if (params.balance === "zero" && balance !== 0) return false;
-      if (params.subject && s.group?.subject !== params.subject) return false;
+      if (params.subject && s.group?.course?.name !== params.subject) return false;
       if (params.teacher && s.group?.teacher?.full_name !== params.teacher) return false;
       if (params.status && s.status !== params.status) return false;
       if (params.date && s.created_at.slice(0, 10) !== params.date) return false;
