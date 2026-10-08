@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-export const GRADE_KINDS = ["homework", "quiz", "midterm", "exam", "final"] as const;
+/** "lesson" — maktab elektron jurnalidagi darsdagi joriy baho (0077). */
+export const GRADE_KINDS = ["homework", "quiz", "midterm", "exam", "final", "lesson"] as const;
 export type GradeKind = (typeof GRADE_KINDS)[number];
 
 export const GRADE_KIND_LABELS: Record<GradeKind, string> = {
@@ -9,6 +10,7 @@ export const GRADE_KIND_LABELS: Record<GradeKind, string> = {
   midterm: "Oraliq",
   exam: "Imtihon",
   final: "Yakuniy",
+  lesson: "Darsdagi baho",
 };
 
 /** 5 ballik tizim. */

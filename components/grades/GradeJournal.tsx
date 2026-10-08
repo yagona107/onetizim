@@ -107,7 +107,7 @@ export function GradeJournal({
             disabled={isPending}
             className={financeInputClass}
           >
-            {GRADE_KINDS.map((k) => (
+            {GRADE_KINDS.filter((k) => k !== "lesson").map((k) => (
               <option key={k} value={k}>
                 {GRADE_KIND_LABELS[k]}
               </option>
